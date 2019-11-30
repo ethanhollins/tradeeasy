@@ -63,13 +63,18 @@ class Block extends Component
         }
     }
 
-    onClick = () =>
+    onMainClick = () =>
     {
         const { step } = this.state;
 
         step.select();
 
         this.setState({ step });
+    }
+
+    onResultClick = () =>
+    {
+
     }
 
     getBadge = () =>
@@ -89,6 +94,13 @@ class Block extends Component
     getRotation = () =>
     {
         return 0;
+    }
+
+    getStep = () =>
+    {
+        const { step } = this.state;
+        if (step !== null)
+            return step.getStep();
     }
 }
 

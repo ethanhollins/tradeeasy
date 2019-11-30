@@ -19,7 +19,7 @@ class ActionBlock extends Block
                     style={{position:'absolute'}}
                     width={this.props.cellSize} 
                     height={this.props.cellSize}
-                    onClick={this.onClick}
+                    onClick={this.onMainClick}
                 >
                     <rect 
                         x={this.getSelectedOffset()} 
@@ -40,7 +40,7 @@ class ActionBlock extends Block
                     style={{position:'absolute'}}
                     width={this.props.cellSize} 
                     height={this.props.cellSize}
-                    onClick={this.onClick}
+                    onClick={this.onMainClick}
                 >
                     <rect 
                         x={this.getDeselectedOffset()} 
