@@ -5,16 +5,31 @@ class ItemBlock extends Block
 {
     getBadge = () =>
     {
-        return (
-            <svg
-                ref="body"
-                style={{position:'absolute'}}
-                width="100" 
-                height="100"
-            >
-                <circle cx="50" cy="50" r="40" stroke="rgb(80,80,80)" strokeWidth="4" fill="rgb(80,80,80)" />
-            </svg>
-        );
+        const { step } = this.state;
+
+        if (step === null || step === undefined)
+        {
+            return;
+        }
+        else if (step.isSelected())
+        {
+            return (
+                <svg
+                    ref="body"
+                    style={{position:'absolute'}}
+                    width="100" 
+                    height="100"
+                >
+                    <rect x="0" y="25" width="100" height="50" fill="rgb(80,80,80)" />
+                </svg>
+            );
+        }
+        else
+        {
+            return;
+        }
+
+        
     }
 }
 

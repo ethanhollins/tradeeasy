@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import BranchContainer from './Branch/BranchContainer';
 import InfoPanel from './Branch/InfoPanel';
-import BranchStep from '../utils/BranchStep';
+import Branch from '../utils/Branch';
 
 class PlanBuilder extends Component
 {
@@ -13,12 +13,13 @@ class PlanBuilder extends Component
     {
         return (
             <React.Fragment>
-                <InfoPanel
+                {/* <InfoPanel
 
-                />
+                /> */}
                 <BranchContainer
                     getBlock={this.getBlock}
                     getBranch={this.getBranch}
+                    setSelected={this.setSelected}
                     BlockType={BlockType}
                 />
             </React.Fragment>
@@ -27,70 +28,19 @@ class PlanBuilder extends Component
 
     componentDidMount()
     {
-        let branch = new BranchStep({name:"On New Bar"});
+        let branch = new Branch({name:"On New Bar"});
         branch.getOpenAtOffset(0).add(this.getBlock("set"));
         branch.getOpenAtOffset(1).add(this.getBlock("above"));
         branch.getOpenAtOffset(2).add(this.getBlock("set"));
-        branch.getOpenAtOffset(3).add(this.getBlock("set"));
+        branch.getOpenAtOffset(3).add(this.getBlock("buy"));
         branch.getOpenAtOffset(4).add(this.getBlock("set"));
+        branch.getOpenAtOffset(3).selected = true;
         
         let { branches } = this.state;
+        console.log(branch.objectify())
 
         branches[branch.block.name] = branch.gotoOpen();
         this.setState({ branches });
-    }
-
-    addStep = (branch, sub, pos, name) =>
-    {
-        const { branches } = this.state;
-        const sub_result = this.getSubBranchAtPos(branch, sub, pos);
-        const sub_mod = sub_result[0];
-        const sub_pos = sub_result[1];
-        const block = this.getBlock(name);
-
-        branches[branch][sub_mod].splice(sub_pos, 0, block);
-
-        this.setState({ branches });
-    }
-
-    changeStep = (branch, sub, pos, name) =>
-    {
-        const { branches } = this.state;
-        const sub_result = this.getSubBranchAtPos(branch, sub, pos);
-        const sub_mod = sub_result[0];
-        const sub_pos = sub_result[1];
-        const block = this.getBlock(name);
-
-        branches[branch][sub_mod][sub_pos] = block;
-
-        this.setState({ branches });
-    }
-
-    removeStep = (branch, sub, pos) =>
-    {
-        const { branches } = this.state;
-        const sub_result = this.getSubBranchAtPos(branch, sub, pos);
-        const sub_mod = sub_result[0];
-        const sub_pos = sub_result[1];
-
-        branches[branch][sub_mod].splice(sub_pos, 1);
-
-        this.setState({ branches });
-    }
-
-    addBranch = (name) =>
-    {
-
-    }
-
-    renameBranch = (branch, name) =>
-    {
-        
-    } 
-
-    removeBranch = (branch) =>
-    {
-
     }
 
     getBranch = (name) =>
@@ -122,26 +72,33 @@ class PlanBuilder extends Component
                 "name": "set",
                 "type": BlockType.ACTION,
                 "actors": 1,
-                "supporters": 1,
-                "result": ["Nothing"]
+                "params": 1,
+                "result": [null]
             },
             "buy": {
                 "name": "buy",
                 "type": BlockType.ACTION,
                 "actors": 1,
-                "supporters": 1,
+                "params": 1,
                 "result": ["Something"]
             },
             "above": {
                 "name": "above",
                 "type": BlockType.QUESTION,
                 "actors": 1,
-                "supporters": 1,
+                "params": 1,
                 "result": [
                     "YES", "NO"
                 ]
             }
         }[name];
+    }
+
+    setSelected = (step) =>
+    {
+        const { branches } = this.state;
+        step.setSelected();
+        this.setState({ branches });
     }
 }
 

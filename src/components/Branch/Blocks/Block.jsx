@@ -29,10 +29,12 @@ class Block extends Component
     setup = () =>
     {
         const { properties } = this.props;
-        let { pos } = this.state;
+        let { pos, step } = this.state;
 
         pos = properties.pos;
-        this.setState({ pos });
+        step = properties.step;
+
+        this.setState({ pos, step });
     }
 
     updateNode = () =>
@@ -41,21 +43,33 @@ class Block extends Component
         const { body } = this.refs;
         const cont_pos = this.props.getContainerPos();
         const camera = this.props.getCamera();
-        
+
         const new_pos = {
-            x: pos.x,
-            y: pos.y + cont_pos
+            x: pos.x + cont_pos.x,
+            y: pos.y + cont_pos.y
         }
 
         const screen_pos = camera.convertWorldPosToScreenPos(new_pos);
-        const cont_screen_pos = camera.convertWorldPosToScreenPos({x:0, y:cont_pos});
+        const cont_screen_pos = camera.convertWorldPosToScreenPos(cont_pos);
         
         const new_screen_pos = {
             x: screen_pos.x - cont_screen_pos.x,
             y: screen_pos.y - cont_screen_pos.y
         }
 
-        body.style.transform = `translate(${new_screen_pos.x}px, ${new_screen_pos.y}px) rotate(${this.getRotation()}deg) scale(${camera.state.zoom})`;
+        if (body !== null && body !== undefined)
+        {
+            body.style.transform = `translate(${new_screen_pos.x}px, ${new_screen_pos.y}px) rotate(${this.getRotation()}deg) scale(${camera.state.zoom})`;
+        }
+    }
+
+    onClick = () =>
+    {
+        const { step } = this.state;
+
+        step.select();
+
+        this.setState({ step });
     }
 
     getBadge = () =>

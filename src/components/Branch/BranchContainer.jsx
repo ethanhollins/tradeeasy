@@ -143,24 +143,33 @@ class BranchContainer extends Component
         
         let c_step = this.props.getBranch(branch);
         let steps = [];
-        let pos = 0;
+        let idx = 0;
+        let y_pos = 0;
 
         while (c_step !== undefined && c_step !== null)
         {
             const properties = {
-                pos: pos,
+                idx: idx,
+                pos: {x:0, y:y_pos},
                 step: c_step
             }
 
             steps.push(<Step
-                key={pos}
+                key={idx}
                 properties={properties}
                 getCamera={this.getCamera}
                 getBlock={this.props.getBlock}
+                setSelected={this.props.setSelected}
                 BlockType={this.props.BlockType}
+                cellSize={CELL_SIZE}
             />);
             
-            pos += 1;
+            if (c_step.block.result[0] !== null)
+                y_pos += 1 + (7/6);
+            else
+                y_pos += 1 + (2/3);
+            
+                idx += 1;
             c_step = c_step.gotoOpen();
         }
 
@@ -189,7 +198,7 @@ const container_style = {
     position: 'relative',
     display: 'inline-block',
     overflow: 'hidden',
-    width: '60%',
+    width: '100%',
     height: '100%',
     backgroundColor: 'rgb(255,255,255)'
     
