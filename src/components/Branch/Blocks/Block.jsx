@@ -39,26 +39,31 @@ class Block extends Component
 
     updateNode = () =>
     {
-        const { pos } = this.state;
         const { body } = this.refs;
-        const cont_pos = this.props.getContainerPos();
-        const camera = this.props.getCamera();
-
-        const new_pos = {
-            x: pos.x + cont_pos.x,
-            y: pos.y + cont_pos.y
-        }
-
-        const screen_pos = camera.convertWorldPosToScreenPos(new_pos);
-        const cont_screen_pos = camera.convertWorldPosToScreenPos(cont_pos);
-        
-        const new_screen_pos = {
-            x: screen_pos.x - cont_screen_pos.x,
-            y: screen_pos.y - cont_screen_pos.y
-        }
-
         if (body !== null && body !== undefined)
         {
+            const { pos } = this.state;
+            const cont_pos = this.props.getContainerPos();
+            const camera = this.props.getCamera();
+
+            const new_pos = {
+                x: pos.x + cont_pos.x,
+                y: pos.y + cont_pos.y
+            }
+
+            const size = {
+                width: body.clientWidth,
+                height: body.clientHeight
+            }
+
+            const screen_pos = camera.convertWorldPosToScreenPos(new_pos, size);
+            const cont_screen_pos = camera.convertWorldPosToScreenPos(cont_pos);
+            
+            const new_screen_pos = {
+                x: screen_pos.x - cont_screen_pos.x,
+                y: screen_pos.y - cont_screen_pos.y
+            }
+
             body.style.transform = `translate(${new_screen_pos.x}px, ${new_screen_pos.y}px) rotate(${this.getRotation()}deg) scale(${camera.state.zoom})`;
         }
     }
@@ -69,12 +74,21 @@ class Block extends Component
 
         step.select();
 
-        this.setState({ step });
+        // this.setState({ step });
     }
 
     onResultClick = () =>
     {
-
+        // DO THIS AT PLAN BUILDER LEVEL
+        const { step } = this.state;
+        if (step.getBlockType() === this.props.BlockType.QUESTION)
+        {
+            step.toggleOpen();
+        }
+        else
+        {
+            // TODO: ACTION BLOCK RESULT CLICK
+        }
     }
 
     getBadge = () =>

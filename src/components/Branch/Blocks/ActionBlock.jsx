@@ -16,7 +16,7 @@ class ActionBlock extends Block
             return (
                 <svg
                     ref="body"
-                    style={{position:'absolute'}}
+                    style={main_style}
                     width={this.props.cellSize} 
                     height={this.props.cellSize}
                     onClick={this.onMainClick}
@@ -37,7 +37,7 @@ class ActionBlock extends Block
             return (
                 <svg
                     ref="body"
-                    style={{position:'absolute'}}
+                    style={main_style}
                     width={this.props.cellSize} 
                     height={this.props.cellSize}
                     onClick={this.onMainClick}
@@ -74,6 +74,12 @@ class ActionBlock extends Block
     {
         return Math.round((this.props.cellSize - this.getSelectedSize()) / 2);
     }
+}
+
+const main_style = {
+    position:'absolute',
+    cursor: "pointer",
+    userSelect: "none"
 }
 
 export default ActionBlock;

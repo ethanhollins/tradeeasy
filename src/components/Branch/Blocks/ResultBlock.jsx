@@ -16,10 +16,10 @@ class ResultBlock extends Block
             return (
                 <div
                     ref="body"
-                    style={{position:'absolute', textAlign:"center", fontSize:"20px", fontWeight:"550", color:"rgb(80,80,80)", fontFamily:"'Segoe UI', Verdana, Geneva, sans-serif", width:"100px", height:"100px"}}
+                    style={result_style}
                     onClick={this.onResultClick}
                 >
-                    {this.getStep().block.result[0]}
+                    {this.getStep().block.result[this.getStep().opened]}
                 </div>
             );
         }
@@ -28,16 +28,25 @@ class ResultBlock extends Block
             return (
                 <div
                     ref="body"
-                    style={{position:'absolute', textAlign:"center", fontSize:"20px", fontWeight:"550", color:"rgb(80,80,80)", fontFamily:"'Segoe UI', Verdana, Geneva, sans-serif", width:"100px", height:"100px"}}
+                    style={result_style}
                     onClick={this.onResultClick}
                 >
-                    {this.getStep().block.result[0]}
+                    {this.getStep().block.result[this.getStep().opened]}
                 </div>
             );
         }
-
-        
     }
+}
+
+const result_style = {
+    position:'absolute', 
+    textAlign:"center", 
+    fontSize:"20px", 
+    fontWeight:"550", 
+    color:"rgb(80,80,80)",
+    fontFamily:"'Segoe UI', Verdana, Geneva, sans-serif",
+    cursor: "pointer",
+    userSelect: "none"
 }
 
 export default ResultBlock;

@@ -8,14 +8,23 @@ class Connector extends Block
         return (
             <svg
                 ref="body"
-                style={{position:'absolute'}}
-                width={this.props.cellSize} 
-                height={this.props.cellSize}
+                style={connector_style}
+                width={this.props.cellSize}
+                height={this.props.cellSize*(1/2)}
             >
-                <rect x="48" y="25" width="4" height={this.props.cellSize*(2/3)+1} fill="rgb(80,80,80)" />
+                <rect 
+                    x="48" y="0" 
+                    width="4" height={this.props.cellSize*(1/2)} 
+                    fill="rgb(80,80,80)" 
+                />
             </svg>
         );
     }
+}
+
+const connector_style = {
+    position:'absolute',
+    userSelect: "none"
 }
 
 export default Connector;

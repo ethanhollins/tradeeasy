@@ -4,13 +4,12 @@ import QuestionBlock from './Blocks/QuestionBlock';
 import ItemBlock from './Blocks/ItemBlock';
 import Connector from './Blocks/Connector';
 import ResultBlock from './Blocks/ResultBlock';
+import ToolBoxBlock from './Blocks/ToolBoxBlock';
 
 class Step extends Component
 {
     state = {
-        idx: 0,
-        pos: {x:0, y:0},
-        step: null
+        pos: {x:0, y:0}
     }
 
     render()
@@ -19,21 +18,22 @@ class Step extends Component
             <div 
                 ref="container" 
                 style={this.getStyle()}
-            >
+                >
                 {this.getConnectors()}
                 {this.getOpp()}
                 {this.getInput()}
                 {this.getOutput()}
                 {this.getResult()}
+                {this.getToolBox()}
             </div>
         );    
     }
-
+    
     componentDidMount()
     {
         this.setup();
     }
-    
+
     componentDidUpdate()
     {
         this.update();
@@ -41,12 +41,9 @@ class Step extends Component
 
     setup = () =>
     {
-        const { properties } = this.props;
-        let { idx, pos, step } = this.state;
-        idx = properties.idx;
-        pos = properties.pos;
-        step = properties.step;
-        this.setState({ idx, pos, step });
+        let { pos } = this.state;
+        pos = this.props.properties.pos;
+        this.setState({ pos });
     }
 
     update = () =>
@@ -61,44 +58,51 @@ class Step extends Component
 
     add = () =>
     {
-        const { step } = this.state;
+        const { step } = this.props.properties;
 
         // step.add()
     }
 
     delete = () =>
     {
-        const { step } = this.state;
+        const { step } = this.props.properties;
 
         // step.delete()
     }
 
     change = () =>
     {
-        const { step } = this.state;
+        const { step } = this.props.properties;
 
         // step.change()
     }
 
     select = () =>
     {
-        const { step } = this.state;
+        const { step } = this.props.properties;
         const { setSelected } = this.props;
 
         setSelected(step);
     }
 
+    toggleOpen = () =>
+    {
+        const { step } = this.props.properties;
+        const { toggleOpen } = this.props;
+
+        toggleOpen(step);
+    }
+
     isSelected = () =>
     {
-        const { step } = this.state;
+        const { step } = this.props.properties;
         return step.selected;
     }
 
     getOpp = () =>
     {
-        const { step } = this.state;
+        const { step } = this.props.properties;
         const { BlockType } = this.props;
-
         if (step !== null)
         {
             const properties = {
@@ -110,6 +114,7 @@ class Step extends Component
                     properties={properties}
                     getCamera={this.getCamera}
                     getContainerPos={this.getContainerPos}
+                    BlockType={this.props.BlockType}
                     cellSize={this.props.cellSize}
                 /> 
             else if (step.block.type === BlockType.QUESTION)
@@ -117,6 +122,7 @@ class Step extends Component
                     properties={properties}
                     getCamera={this.getCamera}
                     getContainerPos={this.getContainerPos}
+                    BlockType={this.props.BlockType}
                     cellSize={this.props.cellSize}
                 /> 
         }
@@ -124,23 +130,33 @@ class Step extends Component
 
     getConnectors = () =>
     {
+        const { pos } = this.state;
+        const { cellSize } = this.props;
+        const block_size = (cellSize) * (2/3);
+        const connector_size = cellSize/2;
+        const offset = ((block_size-connector_size)/2 + connector_size)/cellSize;
+        
         return ([<Connector
-            properties={{pos:{x:this.state.pos.x,y:this.state.pos.y-(1/2)}}}
+            key={0}
+            properties={{pos:{x:pos.x,y:pos.y - offset}}}
             getCamera={this.getCamera}
             getContainerPos={this.getContainerPos}
-            cellSize={this.props.cellSize}
+                    BlockType={this.props.BlockType}
+                    cellSize={this.props.cellSize}
         />,
         <Connector
-            properties={{pos:{x:this.state.pos.x,y:this.state.pos.y+(1/2)}}}
+            key={1}
+            properties={{pos:{x:pos.x,y:pos.y+offset}}}
             getCamera={this.getCamera}
             getContainerPos={this.getContainerPos}
+            BlockType={this.props.BlockType}
             cellSize={this.props.cellSize}
         />]);
     }
 
     getInput = () =>
     {
-        const { step } = this.state;
+        const { step } = this.props.properties;
         let result = [];
 
         if (step !== null)
@@ -156,6 +172,7 @@ class Step extends Component
                     properties={properties}
                     getCamera={this.getCamera}
                     getContainerPos={this.getContainerPos}
+                    BlockType={this.props.BlockType}
                     cellSize={this.props.cellSize}
                 />);
             }
@@ -166,7 +183,7 @@ class Step extends Component
 
     getOutput = () =>
     {
-        const { step } = this.state;
+        const { step } = this.props.properties;
         let result = [];
 
         if (step !== null)
@@ -182,6 +199,7 @@ class Step extends Component
                     properties={properties}
                     getCamera={this.getCamera}
                     getContainerPos={this.getContainerPos}
+                    BlockType={this.props.BlockType}
                     cellSize={this.props.cellSize}
                 />);
             }
@@ -192,22 +210,22 @@ class Step extends Component
 
     getResult = () =>
     {
-        const { step } = this.state;
+        const { step } = this.props.properties;
 
         if (step !== null)
         {
             if (step.block.result[0] !== null)
             {
                 const properties = {
-                    pos: {x:0, y:1+3/5 - (1/15)},
+                    pos: {x:0, y:1-1/40},
                     step: this
                 }
                 return (
                     <ResultBlock
-                        key={'asa'}
                         properties={properties}
                         getCamera={this.getCamera}
                         getContainerPos={this.getContainerPos}
+                        BlockType={this.props.BlockType}
                         cellSize={this.props.cellSize}
                     />
                 );
@@ -215,10 +233,37 @@ class Step extends Component
         }
     }
 
+    getToolBox = () =>
+    {
+        const { step } = this.props.properties;
+
+        if (step !== null && step !== undefined)
+        {
+            if (step.selected)
+            {
+                const properties = {
+                    //w/ RESULT: 2 - 1/3
+                    //w/out RESULT: 1 + 1/3
+                    pos: {x:0, y:1 + 1/3 - 1/8},
+                    step: this
+                }
+                return (<ToolBoxBlock
+                    properties={properties}
+                    getCamera={this.getCamera}
+                    getContainerPos={this.getContainerPos}
+                    BlockType={this.props.BlockType}
+                    cellSize={this.props.cellSize}
+                />)
+            }
+        }
+    }
+
     getStyle = () =>
     {
+        const { zidx } = this.props.properties;
         return {
-            position: 'absolute'
+            position: 'absolute',
+            zIndex: zidx
         }
     }
 
@@ -239,7 +284,12 @@ class Step extends Component
 
     getStep = () =>
     {
-        return this.state.step;
+        return this.props.properties.step;
+    }
+
+    getBlockType = () =>
+    {
+        return this.getStep().block.type;
     }
     
 }

@@ -1,7 +1,7 @@
 class Branch
 {
     next = [];
-    open = false;
+    opened = 0;
     selected = false;
 
     constructor(block, prev, pos)
@@ -17,18 +17,32 @@ class Branch
 
     add = (block) =>
     {
-        const new_step = new Branch(
-            block, this, this.next.length
-        );
-        this.next.push(new_step);
+        if (this.next.length < this.block.result.length)
+        {
+            const new_step = new Branch(
+                block, this, this.next.length
+            );
+            this.next.push(new_step);
+    
+            return new_step;
+        }
 
-        return new_step;
+        return null;
+    }
+
+    insertAbove = (block) =>
+    {
+
+    }
+
+    insertBelow = (block) =>
+    {
+
     }
 
     delete = () =>
     {
-        const open_pos = this.getOpen();
-        const step = open_pos === null ? null : this.next[open_pos];
+        const step = this.getOpen();
         this.prev.replaceStep(step, this.pos);
         return this;
     }
@@ -52,6 +66,19 @@ class Branch
     {
 
     }
+    
+    open = (pos) =>
+    {
+        if (pos < this.block.result.length)
+        {
+            this.opened = pos;
+        }
+    }
+    
+    toggleOpen = () =>
+    {
+        this.open((this.opened + 1) % this.block.result.length);
+    }
 
     replaceStep = (step, pos) =>
     {
@@ -71,39 +98,17 @@ class Branch
 
     getOpen = () =>
     {
-        let result = null;
-        let result_step = null;
-        this.next.forEach((i, i_idx) =>
-        {
-            if (result === null || i.open)
-            {
-                result = i_idx;
-                result_step = i;
-            }
-        });
-
-        if (result_step !== null)
-            result_step.setOpen();
-        return result;
+        return this.opened > this.next.length - 1 ? null : this.next[this.opened];
     }
 
     gotoOpen = () =>
     {
-        const pos = this.getOpen();
-        return pos !== null ? this.next[pos] : null;
+        return this.getOpen();
     }
 
     setOpen = () =>
     {
-        this.prev.next.forEach(i =>
-        {
-            if (i.pos === this.pos)
-                this.open = true;
-            else
-                i.open = false;
-
-        });
-        // set all prev next to open := false
+        this.prev.opened = this.pos;
     }
 
     setSelected = () =>
@@ -199,11 +204,24 @@ class Branch
 
     }
 
+    getSize = () =>
+    {
+        let count = 0;
+        let c_step = this;
+        while (c_step !== null && c_step !== undefined)
+        {
+            count++;
+            c_step = c_step.gotoOpen();
+        }
+
+        return count;
+    }
+
     objectify = () =>
     {
         let result = {
             block: this.block.name,
-            open: this.open,
+            opened: this.opened,
             next: []
         };
 

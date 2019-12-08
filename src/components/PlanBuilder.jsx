@@ -20,6 +20,7 @@ class PlanBuilder extends Component
                     getBlock={this.getBlock}
                     getBranch={this.getBranch}
                     setSelected={this.setSelected}
+                    toggleOpen={this.toggleOpen}
                     BlockType={BlockType}
                 />
             </React.Fragment>
@@ -28,13 +29,14 @@ class PlanBuilder extends Component
 
     componentDidMount()
     {
-        let branch = new Branch({name:"On New Bar"});
+        let branch = new Branch({name:"On New Bar", result: [null]});
         branch.getOpenAtOffset(0).add(this.getBlock("set"));
         branch.getOpenAtOffset(1).add(this.getBlock("above"));
-        branch.getOpenAtOffset(2).add(this.getBlock("set"));
-        branch.getOpenAtOffset(3).add(this.getBlock("buy"));
-        branch.getOpenAtOffset(4).add(this.getBlock("set"));
-        branch.getOpenAtOffset(3).selected = true;
+        branch.getOpenAtOffset(2).add(this.getBlock("buy"));
+        branch.getOpenAtOffset(2).add(this.getBlock("above"));
+        branch.getOpenAtOffset(3).add(this.getBlock("above"));
+        branch.getOpenAtOffset(4).add(this.getBlock("above"));
+        // branch.getOpenAtOffset(3).selected = true;
         
         let { branches } = this.state;
         console.log(branch.objectify())
@@ -98,6 +100,13 @@ class PlanBuilder extends Component
     {
         const { branches } = this.state;
         step.setSelected();
+        this.setState({ branches });
+    }
+
+    toggleOpen = (step) =>
+    {
+        const { branches } = this.state;
+        step.toggleOpen();
         this.setState({ branches });
     }
 }

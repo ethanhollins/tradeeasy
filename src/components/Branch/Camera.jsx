@@ -83,7 +83,6 @@ class Camera extends Component
     convertWorldPosToScreenPos = (world_pos, size) =>
     {
         const { pos } = this.state;
-        const { cellSize } = this.props;
 
         let screen_pos = {x:0, y:0};
         size = size === undefined || size === null ? {width:0, height:0}: size;
@@ -93,14 +92,12 @@ class Camera extends Component
             * this.getModifiedCellSize() 
             + this.props.getWidth()/2 
             - size.width/2
-            - cellSize/2
         );
         screen_pos.y = (
             parseFloat(world_pos.y - pos.y) 
             * this.getModifiedCellSize() 
             + this.props.getHeight()/2 
             - size.height/2
-            - cellSize/2
         );
     
         return screen_pos;

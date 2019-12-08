@@ -143,34 +143,41 @@ class BranchContainer extends Component
         
         let c_step = this.props.getBranch(branch);
         let steps = [];
-        let idx = 0;
-        let y_pos = 0;
 
-        while (c_step !== undefined && c_step !== null)
+        if (c_step !== undefined && c_step !== null)
         {
-            const properties = {
-                idx: idx,
-                pos: {x:0, y:y_pos},
-                step: c_step
-            }
+            let branch_size = c_step.getSize();
+            let idx = 0;
+            let y_pos = 0;
+            
+            while (c_step !== undefined && c_step !== null)
+            {
+                const properties = {
+                    idx: idx,
+                    zidx: branch_size - idx,
+                    pos: {x:0, y:y_pos},
+                    step: c_step
+                }
 
-            steps.push(<Step
-                key={idx}
-                properties={properties}
-                getCamera={this.getCamera}
-                getBlock={this.props.getBlock}
-                setSelected={this.props.setSelected}
-                BlockType={this.props.BlockType}
-                cellSize={CELL_SIZE}
-            />);
-            
-            if (c_step.block.result[0] !== null)
-                y_pos += 1 + (7/6);
-            else
-                y_pos += 1 + (2/3);
-            
+                steps.push(<Step
+                    key={idx}
+                    properties={properties}
+                    getCamera={this.getCamera}
+                    getBlock={this.props.getBlock}
+                    setSelected={this.props.setSelected}
+                    toggleOpen={this.props.toggleOpen}
+                    BlockType={this.props.BlockType}
+                    cellSize={CELL_SIZE}
+                />);
+                
+                if (c_step.block.result[0] !== null)
+                    y_pos += 2;
+                else
+                    y_pos += 1 + (2/3);
+                
                 idx += 1;
-            c_step = c_step.gotoOpen();
+                c_step = c_step.gotoOpen();
+            }
         }
 
         return steps;
