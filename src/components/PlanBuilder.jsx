@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import BranchContainer from './Branch/BranchContainer';
 import InfoPanel from './Branch/InfoPanel';
 import Branch from '../utils/Branch';
+import Module from '../utils/Module';
 
 class PlanBuilder extends Component
 {
@@ -29,7 +30,7 @@ class PlanBuilder extends Component
 
     componentDidMount()
     {
-        let branch = new Branch({name:"On New Bar", result: [null]});
+        let branch = new Branch({name:"onNewBar", result: [null]});
         branch.getOpenAtOffset(0).add(this.getBlock("set"));
         branch.getOpenAtOffset(1).add(this.getBlock("above"));
         branch.getOpenAtOffset(2).add(this.getBlock("buy"));
@@ -37,11 +38,11 @@ class PlanBuilder extends Component
         branch.getOpenAtOffset(3).add(this.getBlock("above"));
         branch.getOpenAtOffset(4).add(this.getBlock("above"));
         // branch.getOpenAtOffset(3).selected = true;
-        
         let { branches } = this.state;
-        console.log(branch.objectify())
-
+        
         branches[branch.block.name] = branch.gotoOpen();
+        // branch.runBacktest();
+        const mod = new Module(branches);
         this.setState({ branches });
     }
 

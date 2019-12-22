@@ -1,3 +1,5 @@
+import Module from './Module';
+
 class Branch
 {
     next = [];
@@ -13,6 +15,8 @@ class Branch
             this.pos = 0;
         else
             this.pos = pos;
+
+        // this.runBacktest();
     }
 
     add = (block) =>
@@ -231,6 +235,24 @@ class Branch
         });
 
         return result;
+    }
+
+    getModuleComponent = () =>
+    {
+        return {
+            fn: this.block.name,
+            args: 'args'
+        };
+    }
+
+    runBacktest = () =>
+    {
+        const mod = new Module(this.objectify());
+    }
+
+    save = () =>
+    {
+
     }
 
 }

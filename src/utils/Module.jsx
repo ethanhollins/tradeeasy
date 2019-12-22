@@ -9,28 +9,47 @@ class Module
          * Add preset compositions in call func
          * link to onTick, onNewBar, onStopLoss etc. calls
          */
+        this.iterateBranches(branches);
     }
 
-    createComp = (comp, branch) =>
+    onLoop = {}
+
+    onTick = {}
+
+    onNewBar = {}
+
+    onTrade = {}
+
+    onStopLoss = {}
+
+    onTakeProfit = {}
+
+    iterateBranches = (branches) =>
     {
-        branch.forEach(i => 
+        for (let name in branches)
         {
-            comp.push([i.function, i.args]); // TODO
-        });
+            this[name] = this.createComp(branches[name]);
+        }
     }
 
-    onLoop = []
+    createComp = (branch) =>
+    {
+        let comp = branch.getModuleComponent();
+        comp.next = [];
 
-    onTick = []
+        branch.next.forEach(i =>
+        {
+            comp.next.push(this.createComp(i));
+        });
 
-    onNewBar = []
-
-    onTrade = []
-
-    onStopLoss = []
-
-    onTakeProfit = []
-
+        return comp;
+    }
+    
+    runBacktest = (start, end) =>
+    {
+        
+    }
+    
     getGlobalVar = (key) =>
     {
         return this.global_vars[key]
