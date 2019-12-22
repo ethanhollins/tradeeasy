@@ -2,7 +2,7 @@ class Module
 {
     global_vars = {}
 
-    constructor()
+    constructor(branches)
     {
         /*
          * TODO:
@@ -10,6 +10,26 @@ class Module
          * link to onTick, onNewBar, onStopLoss etc. calls
          */
     }
+
+    createComp = (comp, branch) =>
+    {
+        branch.forEach(i => 
+        {
+            comp.push([i.function, i.args]); // TODO
+        });
+    }
+
+    onLoop = []
+
+    onTick = []
+
+    onNewBar = []
+
+    onTrade = []
+
+    onStopLoss = []
+
+    onTakeProfit = []
 
     getGlobalVar = (key) =>
     {
