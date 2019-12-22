@@ -5,7 +5,7 @@ import Step from './Step';
 class BranchContainer extends Component
 {
     state = {
-        branch: "On New Bar",
+        branch: "onNewBar",
         is_panning: false
     }
 
