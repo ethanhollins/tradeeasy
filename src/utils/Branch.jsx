@@ -241,7 +241,7 @@ class Branch
     {
         return {
             fn: this.block.name,
-            args: 'args'
+            args: this.block.args
         };
     }
 

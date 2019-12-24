@@ -1,3 +1,5 @@
+import Utilities from './Utilities';
+
 class Module
 {
     global_vars = {}
@@ -9,6 +11,7 @@ class Module
          * Add preset compositions in call func
          * link to onTick, onNewBar, onStopLoss etc. calls
          */
+        this.utils = new Utilities();
         this.iterateBranches(branches);
     }
 
@@ -34,7 +37,11 @@ class Module
 
     createComp = (branch) =>
     {
-        let comp = branch.getModuleComponent();
+        const b_prop = branch.getModuleComponent();
+        let comp = {
+            fn: this.utils[b_prop.fn],
+            args: b_prop.args
+        }
         comp.next = [];
 
         branch.next.forEach(i =>

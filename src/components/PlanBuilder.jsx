@@ -30,7 +30,7 @@ class PlanBuilder extends Component
 
     componentDidMount()
     {
-        let branch = new Branch({name:"onNewBar", result: [null]});
+        let branch = new Branch({name:"onNewBar", args: null, result: [null]});
         branch.getOpenAtOffset(0).add(this.getBlock("set"));
         branch.getOpenAtOffset(1).add(this.getBlock("above"));
         branch.getOpenAtOffset(2).add(this.getBlock("buy"));
@@ -43,6 +43,7 @@ class PlanBuilder extends Component
         branches[branch.block.name] = branch.gotoOpen();
         // branch.runBacktest();
         const mod = new Module(branches);
+        console.log(mod.onNewBar);
         this.setState({ branches });
     }
 
@@ -74,6 +75,7 @@ class PlanBuilder extends Component
             "set": {
                 "name": "set",
                 "type": BlockType.ACTION,
+                "args": [null, null],
                 "actors": 1,
                 "params": 1,
                 "result": [null]
@@ -81,6 +83,7 @@ class PlanBuilder extends Component
             "buy": {
                 "name": "buy",
                 "type": BlockType.ACTION,
+                "args": [null],
                 "actors": 1,
                 "params": 1,
                 "result": ["Something"]
@@ -88,6 +91,7 @@ class PlanBuilder extends Component
             "above": {
                 "name": "above",
                 "type": BlockType.QUESTION,
+                "args": [null, null],
                 "actors": 1,
                 "params": 1,
                 "result": [
