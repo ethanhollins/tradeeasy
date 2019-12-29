@@ -3,7 +3,7 @@ class Utilities
     constructor()
     {
         this.set.argtype = ['var', null];
-        this.buy.argtype = ['var', null];
+        this.buy.argtype = [null];
         this.above.argtype = ['var', null];
 
     }
@@ -12,24 +12,41 @@ class Utilities
      * ACTION FUNCTIONS
      */
 
-    set = (a, b) =>
-    {
+    set = {
+        'fn': (a, b) =>
+        {
 
+        },
+        'argtype': ['var', null],
+        'type': BlockType.ACTION,
+        'result': ['var']
     }
 
-    buy = (ticket) =>
-    {
-
+    buy = {
+        'fn': (ticket) =>
+        {
+    
+        },
+        'argtype': ['var', null],
+        'type': BlockType.ACTION,
+        'result': ['var']
     }
 
     /*
      * QUESTION FUNCTIONS
      */
 
-    above = (a, b) =>
-    {
-
+    above = {
+        'fn': (a, b) =>
+        {
+    
+        },
+        'argtype': ['var', null],
+        'type': BlockType.QUESTION,
+        'result': ['var']
     }
+
+    
 
     /*
      * ARGUMENT OBJECTS
@@ -47,6 +64,11 @@ class Utilities
         return type.toLowerCase();
     }
 
+}
+
+const BlockType = {
+    ACTION: 1,
+    QUESTION: 2
 }
 
 export default Utilities;
